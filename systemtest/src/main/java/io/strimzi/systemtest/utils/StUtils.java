@@ -11,7 +11,7 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.internal.readiness.Readiness;
-import io.strimzi.systemtest.Resources;
+import io.strimzi.systemtest.Constants;
 import io.strimzi.test.TestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -175,7 +175,7 @@ public class StUtils {
      */
     public static void waitForAllStatefulSetPodsReady(KubernetesClient client, String namespace, String name) {
         LOGGER.info("Waiting for StatefulSet {} to be ready", name);
-        TestUtils.waitFor("statefulset " + name, Resources.POLL_INTERVAL_FOR_RESOURCE_READINESS, Resources.TIMEOUT_FOR_RESOURCE_READINESS,
+        TestUtils.waitFor("statefulset " + name, Constants.POLL_INTERVAL_FOR_RESOURCE_READINESS, Constants.TIMEOUT_FOR_RESOURCE_READINESS,
             () -> client.apps().statefulSets().inNamespace(namespace).withName(name).isReady());
         LOGGER.info("StatefulSet {} is ready", name);
         LOGGER.info("Waiting for Pods of StatefulSet {} to be ready", name);
@@ -183,7 +183,7 @@ public class StUtils {
     }
 
     public static void waitForPodsReady(KubernetesClient client, String namespace, LabelSelector selector, boolean containers) {
-        TestUtils.waitFor("All pods matching " + selector + "to be ready", Resources.POLL_INTERVAL_FOR_RESOURCE_READINESS, Resources.TIMEOUT_FOR_RESOURCE_READINESS, () -> {
+        TestUtils.waitFor("All pods matching " + selector + "to be ready", Constants.POLL_INTERVAL_FOR_RESOURCE_READINESS, Constants.TIMEOUT_FOR_RESOURCE_READINESS, () -> {
             List<Pod> pods = client.pods().inNamespace(namespace).withLabelSelector(selector).list().getItems();
             if (pods.isEmpty()) {
                 LOGGER.debug("Not ready (no pods matching {})", selector);
@@ -215,7 +215,7 @@ public class StUtils {
      */
     public static void waitForDeploymentReady(KubernetesClient client, String namespace, String name) {
         LOGGER.info("Waiting for Deployment {}", name);
-        TestUtils.waitFor("deployment " + name, Resources.POLL_INTERVAL_FOR_RESOURCE_READINESS, Resources.TIMEOUT_FOR_RESOURCE_READINESS,
+        TestUtils.waitFor("deployment " + name, Constants.POLL_INTERVAL_FOR_RESOURCE_READINESS, Constants.TIMEOUT_FOR_RESOURCE_READINESS,
             () -> client.apps().deployments().inNamespace(namespace).withName(name).isReady());
         LOGGER.info("Deployment {} is ready", name);
     }
